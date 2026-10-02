@@ -1,11 +1,11 @@
 import os
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from sqlalchemy.orm import declarative_base, relationship, sessionmaker, scoped_session
 
 
-engine = create_engine("mysql+pymysql://usuario:senha@localhost:3306/nomedobanco")
+engine = create_engine("mysql+pymysql://root:senaisp@localhost:3306/interclasse_db")
 
-SessionLocal = sessionmaker(bind=engine)
+db_session = scoped_session(sessionmaker(bind=engine))
 
 Base = declarative_base()
 
@@ -15,14 +15,14 @@ class Time(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(100), nullable=False)
     turma = Column(String(50))
-
+    responsavel = Column(String(50), nullable=False)
 
 class Jogador(Base):
     __tablename__ = "jogadores"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(100), nullable=False)
-    idade = Column(Integer)
+    numero_camisa = Column(Integer)
     posicao = Column(String(50))
     time_id = Column(Integer, ForeignKey("times.id", ondelete="SET NULL"))
 
@@ -33,11 +33,11 @@ class Partida(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     time_casa_id = Column(Integer, ForeignKey("times.id", ondelete="CASCADE"), nullable=False)
     time_visitante_id = Column(Integer, ForeignKey("times.id", ondelete="CASCADE"), nullable=False)
-    placar_casa = Column(Integer, default=0)
-    placar_visitante = Column(Integer, default=0)
+    gols_casa = Column(Integer, default=0)
+    gols_visitante = Column(Integer, default=0)
     data_partida = Column(String(20))
 
 
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=engine)
+    if __name__ == "__main__":
+        Base.metadata.create_all(bind=engine)
 
