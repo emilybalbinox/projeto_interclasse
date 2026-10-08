@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, g
+from flask import Flask, render_template, request, redirect, url_for, flash
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
 from banco import tabela_time, tabela_partida, tabela_jogador
 from database import *
-from database import Time,Jogador,db_session, Partida
+from database import Time, Jogador, db_session, Partida
 
 app = Flask(__name__)
 app.secret_key = "chave-secreta-interclasse-2026"
@@ -13,15 +13,15 @@ app.secret_key = "chave-secreta-interclasse-2026"
 @app.route("/")
 def dashboard():
     # Buscar todos os times do banco
-    partidas = tabela_partida.select_todas_partidas()
-    jogadores = tabela_jogador.select_todos_jogadores()
-    times = tabela_time.select_todos_times()
+    partidas = tabela_partida.select_quantidade_total()
+    jogadores = tabela_jogador.select_quantidade_total()
+    times = tabela_time.select_quantidade_total()
 
     return render_template(
         "dashboard.html",
-        total_jogadores=len(jogadores),
-        total_times=len(times),
-        total_partidas=len(partidas),
+        total_jogadores=jogadores,
+        total_times=times,
+        total_partidas=partidas,
 
     )
 
@@ -29,7 +29,8 @@ def dashboard():
 @app.route("/jogadores")
 def listar_jogadores():
     # Buscar todos os times do banco
-    jogadores = tabela_jogador.select_todos_jogadores()
+    jogadores = tabela_jogador.select_todos()
+    print(jogadores)
     return render_template("jogadores.html", jogadores=jogadores)
 
 
@@ -57,8 +58,8 @@ def novo_jogador():
 
         tabela_jogador.salvar_jogadores(nome=nome, numero_camisa=numero_camisa, posicao=posicao, time_id=time_id)
 
-    jogadores = tabela_jogador.select_todos_jogadores()
-    times = tabela_time.select_todos_times()
+    jogadores = tabela_jogador.select_todos()
+    times = tabela_time.select_todos()
 
 
     print(jogadores)
@@ -66,7 +67,8 @@ def novo_jogador():
 
 @app.route("/times",methods=["GET", "POST"])
 def listar_times():
-    times = tabela_time.select_todos_times()
+    times = tabela_time.select_todos()
+    print(times)
     return render_template("times.html", times=times)
 
 
@@ -134,7 +136,7 @@ def nova_partida():
         tabela_partida.salvar_partidas(time_casa_id=time_casa_id, time_visitante_id=time_visitante_id, gols_casa=gols_casa, gols_visitante=gols_visitante, data_partida=data_partida)
 
     partidas = tabela_partida.select_todas_partidas()
-    times = tabela_time.select_todos_times()
+    times = tabela_time.select_todos()
 
     return render_template("partidas.html", partidas=partidas, times=times)
 

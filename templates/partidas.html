@@ -24,7 +24,7 @@
                 <div class="campo">
                     <label for="time_casa_id">Time da Casa *</label>
                     <select id="time_casa_id" name="time_casa_id" required>
-                        {% for time in times %}
+                        {% for time, jogadores in times %}
                         <option value="{{ time.id }}">{{ time.nome }}</option>
                         {% endfor %}
                     </select>
@@ -32,7 +32,7 @@
                 <div class="campo">
                     <label for="time_visitante_id">Time Visitante *</label>
                     <select id="time_visitante_id" name="time_visitante_id" required>
-                        {% for time in times %}
+                        {% for time, jogadores in times %}
                         <option value="{{ time.id }}">{{ time.nome }}</option>
                         {% endfor %}
                     </select>
@@ -56,7 +56,7 @@
             </div>
             <div class="acoes-form">
                 <button type="submit" class="botao">Cadastrar</button>
-                <a href="{{ url_for('listar_partidas') }}" class="botao botao-secundario">Cancelar</a>
+                <a href="{{ url_for('nova_partida') }}" class="botao botao-secundario">Cancelar</a>
             </div>
         </form>
         {% endif %}
@@ -67,10 +67,33 @@
         <h2>Lista de Partidas</h2>
         {% if partidas %}
         <table>
-<!--            Insira sua tabela aqui  -->
+
         </table>
         {% else %}
             <p class="vazio">Nenhuma partida cadastrada ainda.</p>
         {% endif %}
     </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
+
